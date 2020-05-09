@@ -508,6 +508,17 @@ export default {
 			if (productId) {
 				this.productId = productId;
 				this.getProductInfo(productId);
+			} else {
+				this.productData = {
+					productName: '',
+					productDescript: '',
+					classifyId: null,
+					categoryList: [],
+					defaultCategoryId: 0,
+					productImg: null,
+					productDesList: [],
+					status: 0
+				};
 			}
 			this.showStatus = true;
 		},
