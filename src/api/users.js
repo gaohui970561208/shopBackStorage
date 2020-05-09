@@ -66,5 +66,8 @@ export const users = {
 	//购物车删除
 	deleteShoppingCart(userId, data) {
 		return http.post(`/deleteShoppingCart?userId=${userId}`, data);
+	},
+	updateUserInfo(params, data) {
+		return http.post('/updateUserInfo', data, { params });
 	}
 };

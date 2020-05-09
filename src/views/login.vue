@@ -6,55 +6,71 @@
 	position: relative;
 	background-image: url(../assets/img/login_bg.jpg);
 	background-position: center center;
-	background-size: 100% auto;
+	background-size: cover;
 	background-repeat: no-repeat;
 	.login_wrap {
 		position: absolute;
 		top: 50%;
-		left: 50%;
+		right: 0%;
 		transform: translate(-50%, -50%);
-		width: 800px;
-		height: 500px;
+		width: 30%;
+		height: 450px;
 		background-color: #ffffff;
 		border-radius: 8px;
-		box-shadow: 0px 0px 2px 2px rgba(91, 153, 248, 1);
+		box-shadow: 0px 0px 2px 2px rgba(255, 114, 201, 0.856);
+	}
+	.logo_wrap {
+		width: 200px;
+		height: auto;
+		.logo {
+			width: 100%;
+			vertical-align: top;
+		}
 	}
 	.title {
 		width: 100%;
-		height: 80px;
+		height: 100px;
 		display: flex;
 		flex-flow: row nowrap;
 		justify-content: center;
 		align-items: center;
-		box-shadow: 0px 1px 1px 1px rgba(91, 153, 248, 1);
-		span {
+		box-shadow: 0px 1px 1px 1px rgba(255, 114, 201, 0.856);
+		.title_text {
 			font-family: '楷体', 'Times New Roman';
 			font-size: 40px;
 			letter-spacing: 10px;
 			color: white;
-			text-shadow: 0 0 5px rgba(91, 153, 248, 1), 5px -2px 20px rgba(91, 153, 248, 1);
+			text-shadow: 0 0 5px rgba(255, 114, 201, 0.856), 5px -2px 20px rgb(237, 161, 252);
+		}
+		.system_text {
+			margin-left: 20px;
+			font-size: 20px;
+			letter-spacing: 0px;
+			color: rgba(255, 114, 201, 0.856);
 		}
 	}
 	.login_data {
 		margin: 0 auto;
-		width: 600px;
+		width: 100%;
 		box-sizing: border-box;
-		padding: 30px 50px;
+		padding: 10px 20px;
 		display: flex;
 		flex-flow: column nowrap;
 		.input_wrap {
 			width: 100%;
-			margin-top: 50px;
+			margin-top: 30px;
 			display: flex;
 			flex-flow: row nowrap;
 			align-items: center;
 			.label {
-				width: 80px;
-				font-size: 20px;
+				min-width: 80px;
+				width: 15%;
+				flex-shrink: 0;
+				font-size: 16px;
 				color: #373737;
 			}
 			.text {
-				width: 400px;
+				width: 80%;
 				outline: none;
 				border: 0;
 				border-bottom: 1px solid rgba(114, 114, 114, 0.8);
@@ -62,7 +78,7 @@
 				flex-flow: row nowrap;
 				align-items: center;
 				height: 40px;
-				font-size: 20px;
+				font-size: 18px;
 				padding-left: 10px;
 			}
 		}
@@ -80,7 +96,7 @@
 		align-items: center;
 		span {
 			color: #ffffff;
-			background-color: #409eff;
+			background-color: rgba(255, 114, 201, 0.856);
 			font-size: 20px;
 			padding: 10px 40px;
 			border-radius: 12px;
@@ -94,7 +110,10 @@
 	<div class="login">
 		<div class="login_wrap">
 			<div class="title">
-				<span>店铺管理系统</span>
+				<div class="logo_wrap">
+					<img src="../assets/img/logo.png" alt="" class="logo" />
+				</div>
+				<span class="system_text">后台管理系统</span>
 			</div>
 			<div class="login_data">
 				<div class="input_wrap">
@@ -156,7 +175,7 @@ export default {
 				const userDataStr = btoa(unescape(encodeURIComponent(JSON.stringify(loginData) + '&&' + time)));
 				localStorage.setItem('SHOPLOGIN', userDataStr);
 				this.$router.push({
-					name: 'index'
+					name: 'home'
 				});
 			} else {
 				this.loginShow = true;

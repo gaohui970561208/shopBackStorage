@@ -89,5 +89,21 @@ export const product = {
 	 */
 	updateProductStatus(params, data) {
 		return http.post('/updateProductStatus', data, { params });
+	},
+	//添加分类
+	addClassify(data) {
+		return http.post('/addClassify', data);
+	},
+	//获取分类列表
+	getClassifyList() {
+		return http.get('/getClassifyList');
+	},
+	//删除分类
+	deleteClassify(classifyId) {
+		return http.delete(`/deleteClassify?classifyId=${classifyId}`);
+	},
+	//修改分类
+	updateClassify(params, data) {
+		return http.post('/updateClassify', data, { params });
 	}
 };

@@ -7,8 +7,9 @@
 		padding: 30px 50px;
 		.shop_card {
 			width: 100%;
-			height: 500px;
-			box-shadow: 0px 0px 3px 3px rgba(91, 160, 248, 0.6);
+			min-height: 500px;
+			max-height: 700px;
+			box-shadow: 0px 0px 1px 1px rgba(255, 190, 235, 0.6);
 			border-radius: 5px;
 			box-sizing: border-box;
 			padding: 60px 50px;
@@ -19,8 +20,8 @@
 			flex-flow: row nowrap;
 		}
 		.avatar_img_wrap {
-			width: 240px;
-			height: 240px;
+			width: 100px;
+			height: 100px;
 			box-shadow: 0px 0px 1px 1px rgba(91, 160, 248, 0.6);
 			border-radius: 50%;
 			position: relative;
@@ -101,8 +102,8 @@
 			}
 		}
 		.label {
-			width: 100px;
-			font-size: 25px;
+			width: 120px;
+			font-size: 20px;
 			text-align: right;
 		}
 		.text {
@@ -110,12 +111,12 @@
 			border: 0;
 			border-bottom: 1px solid #393939;
 			padding: 5px 20px;
-			font-size: 25px;
+			font-size: 20px;
 			color: #393939;
 		}
 		.shop_logo_wrap {
-			width: 200px;
-			height: 200px;
+			width: 100px;
+			height: 100px;
 			overflow: hidden;
 			border-radius: 3px;
 			display: flex;
@@ -145,6 +146,31 @@
 			}
 		}
 	}
+	.shop_descript {
+		margin-top: 50px;
+		display: flex;
+		flex-flow: row nowrap;
+		align-items: flex-start;
+		color: #636363;
+		.label {
+			flex-shrink: 0;
+			width: 120px;
+			font-size: 20px;
+		}
+		.shop_brief {
+			min-height: 200px;
+			max-height: 400px;
+			font-size: 20px;
+			overflow-x: hidden;
+			overflow-y: auto;
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+	}
+	.el-button + .el-button {
+		margin-left: 100px;
+	}
 }
 </style>
 <template>
@@ -155,49 +181,35 @@
 					<div class="avatar_img_wrap">
 						<img :src="shopInfo.shopLogo" alt="" v-if="shopInfo.shopLogo" />
 						<img src="../../assets/img/default_shop.jpg" alt="" v-else />
-						<div class="operate_btn_wrap">
-							<el-upload
-								class="upload-demo"
-								action=""
-								:show-file-list="false"
-								:auto-upload="false"
-								:on-change="getFile"
-							>
-								<el-button type="primary" class="btn upload_avatar">点击上传</el-button>
-								<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-							</el-upload>
-						</div>
 					</div>
 					<div class="meg_content">
 						<div class="meg_item">
 							<div class="label">店铺名称：</div>
 							<div class="text">{{ shopInfo.shopName || '店铺名称' }}</div>
-							<i class="icon iconfont iconchuangzuo" @click="updateInfoDialog(1)"></i>
-						</div>
-						<div class="meg_item">
-							<div class="label">店铺简介：</div>
-							<div class="text">{{ shopInfo.shopBrief || '什么都没有留下' }}</div>
-							<i class="icon iconfont iconchuangzuo" @click="updateInfoDialog(2)"></i>
-						</div>
-						<div class="meg_item">
-							<el-button @click="editShop">修改店铺信息</el-button>
 						</div>
 					</div>
+					<div class="edit_btn">
+						<el-button @click="editShop">修改店铺信息</el-button>
+					</div>
+				</div>
+				<div class="shop_descript">
+					<div class="label">店铺简介：</div>
+					<div class="shop_brief">{{ shopInfo.shopBrief || '什么都没有留下' }}</div>
 				</div>
 			</div>
 		</div>
-		<el-dialog title="提示" :visible.sync="editShow">
+		<el-dialog title="修改店铺信息" :visible.sync="editShow" :center="true" width="40%">
 			<div class="edit_wrap">
 				<div class="edit_item">
-					<div class="label">店名：</div>
+					<div class="label">店铺名称：</div>
 					<input type="text" class="text" v-model="shopInfo.shopName" placeholder="请输入店铺名称" />
 				</div>
 				<div class="edit_item">
-					<div class="label">简介：</div>
+					<div class="label">店铺简介：</div>
 					<input type="text" class="text" v-model="shopInfo.shopBrief" placeholder="请输入店铺简介" />
 				</div>
 				<div class="edit_item">
-					<div class="label">Logo：</div>
+					<div class="label">店铺Logo：</div>
 					<el-upload action="" :show-file-list="false" :auto-upload="false" :on-change="getFile">
 						<div class="shop_logo_wrap">
 							<img :src="editLogoSrc" alt="" v-if="editLogoSrc" />

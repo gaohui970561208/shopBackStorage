@@ -121,12 +121,12 @@
 				<el-button slot="append" icon="el-icon-search" @click="searchProducts"></el-button>
 			</el-input>
 			<div class="btn_wrap">
-				<el-button class="btn" type="primary" @click="addProductDialog">添加商品</el-button>
+				<el-button class="btn" type="primary" @click="addProductDialog">添加服装</el-button>
 			</div>
 		</div>
 		<el-table :data="productsList" max-height="700">
-			<el-table-column prop="productName" label="商品名称" width="200"> </el-table-column>
-			<el-table-column prop="productImg" label="商品图片" width="180">
+			<el-table-column prop="productName" label="服装名称" width="200"> </el-table-column>
+			<el-table-column prop="productImg" label="服装图片" width="180">
 				<template slot-scope="scope">
 					<div class="product_img">
 						<img :src="scope.row.productImg" alt="" />
@@ -134,8 +134,8 @@
 				</template>
 			</el-table-column>
 			<el-table-column prop="categoryName" label="默认规格"> </el-table-column>
-			<el-table-column prop="cateNum" label="默认规格库存"> </el-table-column>
-			<el-table-column prop="catePrice" label="默认规格价格">
+			<el-table-column prop="cateNum" label="默认库存"> </el-table-column>
+			<el-table-column prop="catePrice" label="默认价格">
 				<template slot-scope="scope">
 					<div class="cell">{{ scope.row.catePrice | pirceFormat }}</div>
 				</template>

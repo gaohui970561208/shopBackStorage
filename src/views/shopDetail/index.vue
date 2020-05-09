@@ -10,24 +10,9 @@
 	.nav_wrap {
 		width: 200px;
 		height: 100%;
-		background-color: #979797;
+		background-color: rgba(253, 182, 255, 0.2);
 		transition: all 0.3s linear;
 		flex-shrink: 1;
-	}
-	.logo_wrap {
-		width: 100%;
-		height: 100px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-image: linear-gradient(to top, rgba(137, 121, 210, 0.6), rgba(172, 169, 110, 0.8));
-		transition: all 0.3s linear;
-		span {
-			color: #ffffff;
-			letter-spacing: 2px;
-			font-size: 22px;
-			text-shadow: 5px 5px 5px rgba(210, 139, 231, 0.8), 3px 5px 5px rgba(26, 170, 217, 0.8);
-		}
 	}
 	.nav {
 		width: 100%;
@@ -36,18 +21,24 @@
 			width: 100%;
 			height: 70px;
 			display: flex;
+			background-color: rgb(255, 225, 253);
+			border-radius: 30px 0 0 30px;
 			justify-content: center;
 			align-items: center;
 			cursor: pointer;
+			transition: all 0.3s linear;
+		}
+		.active_nav {
+			background-color: rgb(209, 209, 209);
 		}
 		.icon {
 			font-size: 24px;
-			color: #ffffff;
+			color: rgb(66, 66, 66);
 		}
 		span {
 			padding-left: 20px;
 			font-size: 20px;
-			color: #ffffff;
+			color: rgb(71, 71, 71);
 		}
 	}
 	.content_wrap {
@@ -60,28 +51,26 @@
 		.nav_wrap {
 			width: 100px;
 		}
-		.logo_wrap {
-			height: 80px;
-			padding: 0 10px;
-			span {
-				color: #ffffff;
-				letter-spacing: 2px;
-				font-size: 18px;
-			}
-		}
 		.nav {
 			width: 100%;
 			.nav_item {
 				width: 100%;
 				height: 100px;
 				display: flex;
-				background-color: #666666;
+				background-color: rgb(209, 209, 209);
 				flex-flow: column nowrap;
 				justify-content: center;
 				align-items: center;
+				border-radius: 30px 0 0 30px;
+			}
+			.active_nav {
+				background-color: rgb(138, 138, 138);
+			}
+			.nav_text {
+				display: none;
 			}
 			.icon {
-				font-size: 24px;
+				font-size: 40px;
 				color: #ffffff;
 			}
 			span {
@@ -101,39 +90,38 @@
 <template>
 	<div class="shop_index_wrap">
 		<div class="nav_wrap">
-			<div class="logo_wrap">
-				<span>电子商务管理系统</span>
-			</div>
 			<div class="nav">
-				<div class="nav_item" @click="goto('shopInfo')">
+				<div
+					class="nav_item"
+					:class="!routeName || routeName === 'shopInfo' ? 'active_nav' : ''"
+					@click="goto('shopInfo')"
+				>
 					<i class="icon iconfont iconziyuan9"></i>
-					<span>店铺信息</span>
+					<span class="nav_text">店铺信息</span>
 				</div>
-				<div class="nav_item" @click="goto('products')">
-					<i class="icon iconfont iconziyuan"></i>
-					<span>商品管理</span>
+				<div class="nav_item" :class="routeName === 'products' ? 'active_nav' : ''" @click="goto('products')">
+					<i class="icon iconfont icongoods-copy"></i>
+					<span class="nav_text">商品管理</span>
 				</div>
-				<div class="nav_item" @click="goto('orders')">
-					<i class="icon iconfont iconziyuan9"></i>
-					<span>订单管理</span>
+				<div class="nav_item" :class="routeName === 'orders' ? 'active_nav' : ''" @click="goto('orders')">
+					<i class="icon iconfont icondingdan"></i>
+					<span class="nav_text">订单管理</span>
 				</div>
 			</div>
 		</div>
 		<div class="content_wrap">
-			<HeadBar />
 			<router-view />
 		</div>
 	</div>
 </template>
 <script>
-import HeadBar from '@/components/index/header.vue';
 import { mapState } from 'vuex';
 import { users, errors } from '@/api';
 
 export default {
 	data() {
 		return {
-			msg: '点击登录'
+			routeName: null
 		};
 	},
 	computed: {
@@ -141,10 +129,15 @@ export default {
 			userInfo: state => state.users.userInfo
 		})
 	},
-	components: {
-		HeadBar
+	watch: {
+		$route(newVal) {
+			this.routeName = newVal.name;
+		}
 	},
-	mounted() {},
+	mounted() {
+		this.routeName = this.$route.name;
+		console.log(this.routeName);
+	},
 	methods: {
 		goto(name) {
 			if (name === this.$route.name) return;

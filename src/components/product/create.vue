@@ -5,6 +5,9 @@
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: space-between;
+	max-height: 60vh;
+	overflow-x: hidden;
+	overflow-y: auto;
 	.contrainer {
 		width: 540px;
 	}
@@ -75,10 +78,22 @@
 			justify-content: center;
 			align-items: center;
 			border: 1px solid #939393;
+			position: relative;
 			img {
 				width: 100%;
 				vertical-align: top;
 				object-fit: cover;
+			}
+			.del_icon {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				font-size: 20px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: rgba(0, 0, 0, 0.4);
+				cursor: pointer;
 			}
 		}
 		.img_label {
@@ -149,6 +164,9 @@
 	}
 	.add_btn {
 		margin-top: 20px;
+	}
+	.upload_descipt {
+		margin-top: 30px;
 	}
 }
 .create_category_wrap {
@@ -255,7 +273,7 @@
 }
 </style>
 <template>
-	<el-dialog width="1120px" :title="title" :visible.sync="showStatus" @closed="deleteCreateCategoy">
+	<el-dialog :title="title" :visible.sync="showStatus" @closed="deleteCreateCategoy" :center="true">
 		<div class="create_wrap">
 			<div class="contrainer">
 				<div class="info_item">
@@ -282,8 +300,8 @@
 						<el-option
 							v-for="(item, index) in classifyList"
 							:key="index"
-							:label="item.label"
-							:value="item.value"
+							:label="item.classifyName"
+							:value="item.classifyId"
 						>
 						</el-option>
 					</el-select>
@@ -350,47 +368,38 @@
 						<el-button class="add_btn" type="primary" @click="addCategoryDialog">添加规格</el-button>
 					</div>
 				</div>
-			</div>
-			<div class="contrainer">
 				<div class="info_item">
 					<div class="label img_label">商品展示图片：</div>
-					<div class="product_show_img">
-						<el-upload
-							action=""
-							:show-file-list="false"
-							:auto-upload="false"
-							:on-change="getProductImgFile"
-						>
+					<el-upload action="" :show-file-list="false" :auto-upload="false" :on-change="getProductImgFile">
+						<div class="product_show_img" v-if="productData.productImg">
 							<img :src="productData.productImg" alt="" v-if="productData.productImg" />
-							<div class="upload_text" v-else>
-								<span class="up_text">上传logo</span>
-								<span class="up_text up_tips">只能上传jpg/png文件</span>
-								<span class="up_text up_tips">大小不超过500kb</span>
-							</div>
-						</el-upload>
-					</div>
+						</div>
+						<el-button v-else>上传商品展示图片</el-button>
+					</el-upload>
 				</div>
 				<div class="info_item">
 					<div class="label img_label">商品描述图片：</div>
 					<div class="product_descript_list">
 						<div class="product_show_img" v-for="(item, index) in productData.productDesList" :key="index">
+							<i class="icon iconfont iconshanchu del_icon" @click="deleteProductDesDialog(index)"></i>
 							<img :src="item" alt="" />
 						</div>
-						<div class="product_show_img" v-show="productData.productDesList.length < 4">
-							<el-upload
-								action=""
-								:show-file-list="false"
-								:auto-upload="false"
-								:on-change="getDesListFile"
+						<el-upload
+							class="upload_descipt"
+							action=""
+							:show-file-list="false"
+							:auto-upload="false"
+							:on-change="getDesListFile"
+						>
+							<el-tooltip
+								class="item"
+								effect="dark"
+								content="图片会依次竖向排列在商品详情区域"
+								placement="top"
 							>
-								<div class="upload_text">
-									<span class="up_text">上传描述图片</span>
-									<span class="up_text up_tips">只能上传jpg/png文件</span>
-									<span class="up_text up_tips">大小不超过500kb</span>
-									<span class="up_text up_tips">最多可以4张</span>
-								</div>
-							</el-upload>
-						</div>
+								<el-button>上传商品描述图片</el-button>
+							</el-tooltip>
+						</el-upload>
 					</div>
 				</div>
 			</div>
@@ -451,6 +460,7 @@
 </template>
 <script>
 import { product, errors } from '@/api';
+import { mapState } from 'vuex';
 
 export default {
 	filters: {
@@ -458,6 +468,11 @@ export default {
 			if (!val) return '0.00';
 			return (val / 100).toFixed(2);
 		}
+	},
+	computed: {
+		...mapState({
+			classifyList: state => state.classify.classifyList
+		})
 	},
 	data() {
 		return {
@@ -467,13 +482,14 @@ export default {
 			productData: {
 				productName: '',
 				productDescript: '',
-				classifyId: 1,
+				classifyId: null,
 				categoryList: [],
 				defaultCategoryId: 0,
 				productImg: null,
 				productDesList: [],
 				status: 0
 			},
+			isCreate: true,
 			showStatus: false,
 			dialogTitle: '',
 			categoryShow: false,
@@ -483,49 +499,7 @@ export default {
 				cateNum: '',
 				catePrice: '',
 				cateImgUrl: null
-			},
-			classifyList: [
-				{
-					value: 1,
-					label: '家用百货'
-				},
-				{
-					value: 2,
-					label: '手机电脑'
-				},
-				{
-					value: 3,
-					label: '电子设备'
-				},
-				{
-					value: 4,
-					label: '精装服饰'
-				},
-				{
-					value: 5,
-					label: '休闲零食'
-				},
-				{
-					value: 6,
-					label: '蔬菜水果'
-				},
-				{
-					value: 7,
-					label: '肉类海鲜'
-				},
-				{
-					value: 8,
-					label: '运动设备'
-				},
-				{
-					value: 9,
-					label: '医药保健'
-				},
-				{
-					value: 10,
-					label: '家具电器'
-				}
-			]
+			}
 		};
 	},
 	methods: {
@@ -596,6 +570,7 @@ export default {
 				if (this.productData.categoryList.length === 1) {
 					this.productData.defaultCategoryId = data.data.insertId;
 				}
+				//创建成功之后，将所有的数据回归到原本的状态
 				this.closeCategoryDialog();
 			} catch (error) {
 				errors(error);
@@ -647,6 +622,7 @@ export default {
 		},
 		//添加规格弹框
 		addCategoryDialog() {
+			this.dialogTitle = '添加规格';
 			this.categoryData = {
 				categoryName: '',
 				cateNum: '',
@@ -686,6 +662,7 @@ export default {
 		},
 		//编辑规格
 		editCategoryDialog(data) {
+			this.dialogTitle = '编辑规格';
 			this.categoryData = JSON.parse(JSON.stringify(data));
 			this.categoryShow = true;
 		},
@@ -703,6 +680,16 @@ export default {
 				const { data, ok } = await product.addProduct(this.shopId, this.productData);
 				if (!ok) return;
 				this.$parent.getProductList();
+				this.productData = {
+					productName: '',
+					productDescript: '',
+					classifyId: null,
+					categoryList: [],
+					defaultCategoryId: 0,
+					productImg: null,
+					productDesList: [],
+					status: 0
+				};
 				this.close();
 			} catch (error) {
 				errors(error);
@@ -713,10 +700,33 @@ export default {
 				const { data, ok } = await product.updateProduct(this.productData.productId, this.productData);
 				if (!ok) return;
 				this.$parent.getProductList();
+				this.productData = {
+					productName: '',
+					productDescript: '',
+					classifyId: null,
+					categoryList: [],
+					defaultCategoryId: 0,
+					productImg: null,
+					productDesList: [],
+					status: 0
+				};
 				this.close();
 			} catch (error) {
 				errors(error);
 			}
+		},
+		deleteProductDesDialog(index) {
+			this.$confirm('是否删除？', '删除描述图片')
+				.then(() => {
+					console.log(index);
+					this.deleteProductDes(index);
+				})
+				.catch(error => {
+					return;
+				});
+		},
+		deleteProductDes(index) {
+			this.productData.productDesList.splice(index, 1);
 		}
 	}
 };
