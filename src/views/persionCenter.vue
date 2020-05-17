@@ -279,32 +279,17 @@
 				<div class="create_shop_btn">
 					<el-button @click="createShow = true">创建店铺</el-button>
 				</div>
-				<el-table
-				max-height="300"
-				:data="shopList"
-				style="width: 100%">
-					<el-table-column
-						prop="shopName"
-						label="店铺名称"
-						width="180">
-					</el-table-column>
-					<el-table-column
-						prop="shopLogo"
-						label="店铺logo"
-						width="180">
+				<el-table max-height="300" :data="shopList" style="width: 100%">
+					<el-table-column prop="shopName" label="店铺名称" width="180"> </el-table-column>
+					<el-table-column prop="shopLogo" label="店铺logo" width="180">
 						<template slot-scope="scope">
 							<div class="shop_table_logo">
-								<img :src="scope.row.shopLogo" alt="">
+								<img :src="scope.row.shopLogo" alt="" />
 							</div>
 						</template>
 					</el-table-column>
-					<el-table-column
-						prop="shopBrief"
-						label="店铺简介">
-					</el-table-column>
-					<el-table-column
-						width="300"
-						label="操作">
+					<el-table-column prop="shopBrief" label="店铺简介"> </el-table-column>
+					<el-table-column width="300" label="操作">
 						<template slot-scope="scope">
 							<div class="shop_table_operate">
 								<div class="btn" @click="toShopDetail(scope.row)">查看</div>
@@ -354,7 +339,7 @@
 				<div class="edit_item">
 					<div class="label">店铺Logo：</div>
 					<el-upload action="" :show-file-list="false" :auto-upload="false" :on-change="createFile">
-						<div class="shop_logo_wrap" v-if="createLogoSrc" >
+						<div class="shop_logo_wrap" v-if="createLogoSrc">
 							<img :src="createLogoSrc" alt="" v-if="createLogoSrc" />
 						</div>
 						<el-button v-else>点击上传logo</el-button>
@@ -401,7 +386,7 @@ export default {
 			createLogoSrc: null,
 			editShow: false,
 			createShow: false
-		}
+		};
 	},
 	mounted() {
 		this.getShopList();
@@ -495,6 +480,11 @@ export default {
 				});
 				this.createShow = false;
 				this.getShopList();
+				this.createShop = {
+					shopName: null,
+					shopLogo: null,
+					shopBrief: null
+				};
 			} catch (error) {
 				errors(error);
 			}
@@ -529,7 +519,7 @@ export default {
 				params: {
 					id: data.shopId
 				}
-			})
+			});
 		}
 	}
 };

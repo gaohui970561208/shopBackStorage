@@ -157,6 +157,7 @@ export default {
 		}),
 		async login() {
 			if (this.loginShow) {
+				localStorage.removeItem('SHOPLOGIN');
 				const time = new Date().getTime();
 				const userData = {
 					username: this.username,
@@ -174,9 +175,11 @@ export default {
 				this.setUserInfo(loginData);
 				const userDataStr = btoa(unescape(encodeURIComponent(JSON.stringify(loginData) + '&&' + time)));
 				localStorage.setItem('SHOPLOGIN', userDataStr);
-				this.$router.push({
-					name: 'home'
-				});
+				setTimeout(() => {
+					this.$router.push({
+						name: 'home'
+					});
+				}, 10);
 			} else {
 				this.loginShow = true;
 			}
