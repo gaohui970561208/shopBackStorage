@@ -560,6 +560,10 @@ export default {
 				this.$message.error('请输入正确的数字');
 				return;
 			}
+			if (!this.categoryData.cateImgUrl) {
+				this.$message.error('请添加规格图片');
+				return;
+			}
 			try {
 				let params = null;
 				if (this.productData.productId) {
@@ -687,6 +691,10 @@ export default {
 				this.$message.error('请添加规格');
 				return;
 			}
+			if (!this.productData.productImg) {
+				this.$message.error('请添加商品展示图片');
+				return;
+			}
 			try {
 				const { data, ok } = await product.addProduct(this.shopId, this.productData);
 				if (!ok) return;
@@ -707,6 +715,14 @@ export default {
 			}
 		},
 		async editProduct() {
+			if (this.productData.categoryList.length === 0) {
+				this.$message.error('请添加规格');
+				return;
+			}
+			if (!this.productData.productImg) {
+				this.$message.error('请添加商品展示图片');
+				return;
+			}
 			try {
 				const { data, ok } = await product.updateProduct(this.productData.productId, this.productData);
 				if (!ok) return;
