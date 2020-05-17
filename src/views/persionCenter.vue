@@ -389,7 +389,9 @@ export default {
 		};
 	},
 	mounted() {
-		this.getShopList();
+		setTimeout(() => {
+			this.getShopList();
+		}, 100);
 	},
 	methods: {
 		...mapActions({
