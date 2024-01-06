@@ -263,8 +263,8 @@ import { mapState, mapActions } from 'vuex';
 export default {
 	computed: {
 		...mapState({
-			userInfo: state => state.users.userInfo
-		})
+			userInfo: (state) => state.users.userInfo,
+		}),
 	},
 	data() {
 		return {
@@ -275,21 +275,21 @@ export default {
 				nickName: '',
 				phone: '',
 				descript: '',
-				avatarUrl: null
+				avatarUrl: null,
 			},
 			oldPass: '',
 			confirmPass: '',
-			newPass: ''
+			newPass: '',
 		};
 	},
 	methods: {
 		...mapActions({
-			setUserInfo: 'users/setUserInfo'
+			setUserInfo: 'users/setUserInfo',
 		}),
 		exitLogin() {
 			localStorage.removeItem('SHOPLOGIN');
 			this.$router.push({
-				name: 'login'
+				name: 'login',
 			});
 		},
 		updatePassDialog() {
@@ -302,19 +302,21 @@ export default {
 			//进行密码验证
 			if (this.oldPass === this.userInfo.password && this.newPass === this.confirmPass) {
 				const params = {
-					userId: this.userInfo.userId
+					userId: this.userInfo.userId,
 				};
 				const time = new Date().getTime();
 				const reData = {
-					password: btoa(this.newPass + '+' + time)
+					password: btoa(this.newPass + '+' + time),
 				};
 				try {
 					const { data, ok } = await users.updatePassword(params, reData);
-					if (!ok) return;
+					if (!ok) {
+						return;
+					}
 					this.$message.success(data.msg);
 					localStorage.removeItem('SHOPLOGIN');
 					this.$router.push({
-						name: 'login'
+						name: 'login',
 					});
 				} catch (error) {
 					errors(error);
@@ -329,7 +331,7 @@ export default {
 			let reader = new FileReader();
 			let baseStr = '';
 			reader.readAsDataURL(file.raw);
-			reader.onload = function(e) {
+			reader.onload = function (e) {
 				baseStr = this.result;
 				_this.userData.avatarUrl = baseStr;
 			};
@@ -339,19 +341,19 @@ export default {
 				return;
 			} else {
 				this.$router.push({
-					name: 'persionCenter'
+					name: 'persionCenter',
 				});
 			}
 		},
 		toAdmin() {
 			this.$router.push({
-				name: 'admin'
+				name: 'admin',
 			});
 		},
 		//修改用户信息弹窗
 		updateUserInfoDialog() {
 			this.userInfoShow = true;
-			this.userData.nickName = this.userInfo.nickName || this.userInfo.userName;
+			this.userData.nickName = this.userInfo.nickName || this.userInfo.username;
 			this.userData.phone = this.userInfo.phone || '';
 			this.userData.avatarUrl = this.userInfo.avatarUrl || null;
 			this.userData.descript = this.userInfo.descript || '';
@@ -359,24 +361,26 @@ export default {
 		async updateUserInfo() {
 			try {
 				const params = {
-					userId: this.userInfo.userId
+					userId: this.userInfo.userId,
 				};
 				const reData = this.userData;
 				const { data, ok } = await users.updateUserInfo(params, reData);
-				if (!ok) return;
+				if (!ok) {
+					return;
+				}
 				this.$message.success(data.msg);
 				this.setUserInfo(params);
 				this.userData = {
 					nickName: '',
 					phone: '',
 					descript: '',
-					avatarUrl: null
+					avatarUrl: null,
 				};
 				this.userInfoShow = false;
 			} catch (error) {
 				errors(error);
 			}
-		}
-	}
+		},
+	},
 };
 </script>

@@ -2,19 +2,19 @@ module.exports = {
 	root: true,
 	env: {
 		browser: true,
-		es6: true
+		es6: true,
 	},
 	extends: ['plugin:vue/essential'],
 	parser: 'vue-eslint-parser',
 	parserOptions: {
 		parser: 'babel-eslint',
 		ecmaVersion: 2018,
-		sourceType: 'module'
+		sourceType: 'module',
 	},
 	plugins: ['vue'],
 	globals: {
 		require: false,
-		module: false
+		module: false,
 	},
 	rules: {
 		'no-unused-vars': 0,
@@ -22,6 +22,7 @@ module.exports = {
 		indent: ['error', 'tab'],
 		'linebreak-style': ['error', 'unix'],
 		quotes: ['error', 'single'],
-		semi: ['error', 'always']
-	}
+		semi: ['error', 'always'],
+		'vue/multi-word-component-names': 'off',
+	},
 };

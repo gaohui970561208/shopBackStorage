@@ -252,7 +252,7 @@
 					</div>
 					<div class="meg_content">
 						<div class="meg_item">
-							<div class="text">{{ userInfo.nickName || userInfo.userName || '昵称' }}</div>
+							<div class="text">{{ userInfo.nickName || userInfo.username || '昵称' }}</div>
 						</div>
 						<div class="meg_item">
 							<div class="text">{{ userInfo.phone }}</div>
@@ -360,14 +360,16 @@ import { mapState, mapActions } from 'vuex';
 export default {
 	computed: {
 		...mapState({
-			userInfo: state => state.users.userInfo
-		})
+			userInfo: (state) => state.users.userInfo,
+		}),
 	},
 	filters: {
 		profitFormat(val) {
-			if (!val) return '0.00';
+			if (!val) {
+				return '0.00';
+			}
 			return (val / 100).toFixed(2);
-		}
+		},
 	},
 	data() {
 		return {
@@ -375,17 +377,17 @@ export default {
 			shopData: {
 				shopName: null,
 				shopLogo: null,
-				shopBrief: null
+				shopBrief: null,
 			},
 			createShopData: {
 				shopName: null,
 				shopLogo: null,
-				shopBrief: null
+				shopBrief: null,
 			},
 			editLogoSrc: null,
 			createLogoSrc: null,
 			editShow: false,
-			createShow: false
+			createShow: false,
 		};
 	},
 	mounted() {
@@ -395,13 +397,15 @@ export default {
 	},
 	methods: {
 		...mapActions({
-			setUserInfo: 'users/setUserInfo'
+			setUserInfo: 'users/setUserInfo',
 		}),
 		async getShopList() {
 			try {
 				this.shopList = [];
 				const { data, ok } = await shop.getShopList(this.userInfo.userId);
-				if (!ok) return;
+				if (!ok) {
+					return;
+				}
 				this.shopList.push(...data.data);
 			} catch (error) {
 				errors(error);
@@ -416,10 +420,12 @@ export default {
 		async updateShop() {
 			try {
 				const { data, ok } = await shop.updateShop(this.shopData.shopId, this.shopData);
-				if (!ok) return;
+				if (!ok) {
+					return;
+				}
 				this.$message({
 					type: 'success',
-					message: data.msg
+					message: data.msg,
 				});
 				this.editShow = false;
 				this.getShopList();
@@ -433,7 +439,7 @@ export default {
 			let baseStr = '';
 			this.editLogoSrc = URL.createObjectURL(file.raw);
 			reader.readAsDataURL(file.raw);
-			reader.onload = function(e) {
+			reader.onload = function (e) {
 				baseStr = this.result;
 				_this.shopData.shopLogo = baseStr;
 			};
@@ -449,7 +455,7 @@ export default {
 			let baseStr = '';
 			this.createLogoSrc = URL.createObjectURL(file.raw);
 			reader.readAsDataURL(file.raw);
-			reader.onload = function(e) {
+			reader.onload = function (e) {
 				baseStr = this.result;
 				_this.createShopData.shopLogo = baseStr;
 			};
@@ -459,8 +465,8 @@ export default {
 			this.$router.push({
 				name: 'shopDetail',
 				params: {
-					id: shopId
-				}
+					id: shopId,
+				},
 			});
 		},
 		//创建店铺
@@ -475,17 +481,19 @@ export default {
 			}
 			try {
 				const { data, ok } = await shop.addShop(this.userInfo.userId, this.createShopData);
-				if (!ok) return;
+				if (!ok) {
+					return;
+				}
 				this.$message({
 					type: 'success',
-					message: data.msg
+					message: data.msg,
 				});
 				this.createShow = false;
 				this.getShopList();
 				this.createShop = {
 					shopName: null,
 					shopLogo: null,
-					shopBrief: null
+					shopBrief: null,
 				};
 			} catch (error) {
 				errors(error);
@@ -495,7 +503,7 @@ export default {
 		deleteShopDialog(item) {
 			this.$confirm('确认删除', '提示', {
 				confirmButtonText: '确认',
-				cancelButtonText: '取消'
+				cancelButtonText: '取消',
 			})
 				.then(() => {
 					this.deleteShop(item.shopId);
@@ -507,7 +515,9 @@ export default {
 		async deleteShop(shopId) {
 			try {
 				const { data, ok } = await shop.deleteShop(shopId);
-				if (!ok) return;
+				if (!ok) {
+					return;
+				}
 				this.$message.success(data.msg);
 				this.getShopList();
 			} catch (error) {
@@ -519,10 +529,10 @@ export default {
 			this.$router.push({
 				name: 'shopDetail',
 				params: {
-					id: data.shopId
-				}
+					id: data.shopId,
+				},
 			});
-		}
-	}
+		},
+	},
 };
 </script>
