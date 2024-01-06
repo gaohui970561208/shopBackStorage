@@ -3,6 +3,7 @@
 import axios from 'axios';
 import env from './config';
 import { Message } from 'element-ui';
+axios.defaults.withCredentials = true;
 
 const config = {
 	...env,
@@ -13,9 +14,6 @@ const config = {
 	},
 	login(res) {
 		const data = res.data;
-		setTimeout(() => {
-			window.location.href = ssoUrlLogin + encodeURI(env.host + env.apiPath);
-		}, 500);
 	},
 	filter(res) {
 		const { status, data } = res;
@@ -30,14 +28,14 @@ const config = {
 		this.errors(data.msg);
 		res.ok = false;
 		return res;
-	}
+	},
 };
 
 const httpCreate = (baseURL, timeout = 600e3) => {
 	const instance = axios.create({
 		baseURL: config.apiPath + baseURL,
 		timeout,
-		headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' }
+		headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
 	});
 	instance.interceptors.response.use(config.filter.bind(config));
 	return instance;
@@ -45,7 +43,7 @@ const httpCreate = (baseURL, timeout = 600e3) => {
 
 const { errors, filter, baseURL } = config;
 
-const getUrlPath = path => {
+const getUrlPath = (path) => {
 	return (config.backend ? config.backend : config.host) + path;
 };
 
